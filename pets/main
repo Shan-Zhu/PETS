@@ -11,17 +11,17 @@ import daetools.pyDAE as dae
 from daetools.solvers.superlu import pySuperLU
 import numpy as np
 
-import mpet.data_reporting as data_reporting
-import mpet.io_utils as IO
-import mpet.sim as sim
-import mpet.utils as utils
+import pets.data_reporting as data_reporting
+import pets.io_utils as IO
+import pets.sim as sim
+import pets.utils as utils
 
 
 def run_simulation(ndD_s, ndD_e, tScale, outdir):
     # Create Log, Solver, DataReporter and Simulation object
     log = dae.daePythonStdOutLog()
     daesolver = dae.daeIDAS()
-    simulation = sim.SimMPET(ndD_s, ndD_e, tScale)
+    simulation = sim.SimPETS(ndD_s, ndD_e, tScale)
     datareporter = data_reporting.setup_data_reporters(simulation, outdir)
 
     # Use SuperLU direct sparse LA solver
@@ -101,7 +101,7 @@ def main(paramfile, keepArchive=True):
         IO.write_dicts(dD_e[trode], ndD_e[trode], filenamebase=dictFile)
 
     # Store info about this script
-    # mpet.py script directory
+    # pets.py script directory
     localDir = os.path.dirname(os.path.abspath(__file__))
     commit_hash = ""
     try:
@@ -127,7 +127,7 @@ def main(paramfile, keepArchive=True):
             print("params files, and:", file=fo)
             print("$ git checkout [commit hash]", file=fo)
             print("$ patch -p1 < commit.diff:", file=fo)
-            print("$ python[3] mpetrun.py input_params_system.cfg", file=fo)
+            print("$ python[3] petsrun.py input_params_system.cfg", file=fo)
         with open(os.path.join(outdir, 'commit.diff'), 'w') as fo:
             print(commit_diff, file=fo)
     else:
